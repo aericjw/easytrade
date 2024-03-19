@@ -35,8 +35,8 @@ jobs:
             token: ${{ secrets.TENANT_TOKEN}}
             metrics: |
                 - metric: "github.deployments"
-                    value: "1.0"
-                    dimensions:
+                  value: "1.0"
+                  dimensions:
                     project: "${{ github.repository }}"
                     branch: "${{ github.ref }}"
                     event: "${{ github.event_name }}"
@@ -65,8 +65,8 @@ jobs:
             token: ${{ secrets.TENANT_TOKEN }}
             metrics: |
                 - metric: "github.deployments"
-                    value: "1.0"
-                    dimensions:
+                  value: "1.0"
+                  dimensions:
                     project: "${{ github.repository }}"
                     branch: "${{ github.ref }}"
                     event: "${{ github.event_name }}"
