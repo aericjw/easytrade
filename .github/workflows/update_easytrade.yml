@@ -32,7 +32,7 @@ jobs:
         uses: dynatrace-oss/dynatrace-github-action@v9
         with:
             url: ${{ secrets.DT_CLASSIC_URL }}
-            token: ${{ secrets.TENANT_TOKEN}}
+            token: ${{ secrets.DT_METRIC_EVENT_TOKEN}}
             metrics: |
                 - metric: "github.deployments"
                   value: "1.0"
@@ -44,25 +44,25 @@ jobs:
                     owner: aericjw
             events: |
                 - type: CUSTOM_DEPLOYMENT
-                title: Easytrade Deployment Failed
-                entitySelector: type("SERVICE"),toRelationship.isClusterOfService(type("KUBERNETES_CLUSTER"),entityName.equals("aeric-aks"))
-                properties:
-                    source: GitHub
-                    deploymentName: "GitHub Action"
-                    deploymentVersion: "${{ github.ref }}"
-                    deploymentProject: "${{ github.repository }}"
-                    remediationAction: "None"
-                    ciBackLink: "https://github.com/${{ github.repository }}"
-                    project: "${{ github.repository }}"
-                    branch: "${{ github.ref }}"
-                    event: "${{ github.event_name }}"
-                    owner: aericjw
+                  title: Easytrade Deployment Failed
+                  entitySelector: type("SERVICE"),toRelationship.isClusterOfService(type("KUBERNETES_CLUSTER"),entityName.equals("aeric-aks"))
+                  properties:
+                      source: GitHub
+                      deploymentName: "GitHub Action"
+                      deploymentVersion: "${{ github.ref }}"
+                      deploymentProject: "${{ github.repository }}"
+                      remediationAction: "None"
+                      ciBackLink: "https://github.com/${{ github.repository }}"
+                      project: "${{ github.repository }}"
+                      branch: "${{ github.ref }}"
+                      event: "${{ github.event_name }}"
+                      owner: aericjw
       - name: notify Dynatrace on success
         if: success()
         uses: dynatrace-oss/dynatrace-github-action@v9
         with:
             url: ${{ secrets.DT_CLASSIC_URL }}
-            token: ${{ secrets.TENANT_TOKEN }}
+            token: ${{ secrets.DT_METRIC_EVENT_TOKEN }}
             metrics: |
                 - metric: "github.deployments"
                   value: "1.0"
@@ -74,16 +74,16 @@ jobs:
                     owner: aericjw
             events: |
                 - type: CUSTOM_DEPLOYMENT
-                title: Easytrade Deployment Failed
-                entitySelector: type("SERVICE"),toRelationship.isClusterOfService(type("KUBERNETES_CLUSTER"),entityName.equals("aeric-aks"))
-                properties:
-                    source: GitHub
-                    deploymentName: "GitHub Action"
-                    deploymentVersion: "${{ github.ref }}"
-                    deploymentProject: "${{ github.repository }}"
-                    remediationAction: "None"
-                    ciBackLink: "https://github.com/${{ github.repository }}"
-                    project: "${{ github.repository }}"
-                    branch: "${{ github.ref }}"
-                    event: "${{ github.event_name }}"
-                    owner: aericjw
+                  title: Easytrade Deployment Failed
+                  entitySelector: type("SERVICE"),toRelationship.isClusterOfService(type("KUBERNETES_CLUSTER"),entityName.equals("aeric-aks"))
+                  properties:
+                      source: GitHub
+                      deploymentName: "GitHub Action"
+                      deploymentVersion: "${{ github.ref }}"
+                      deploymentProject: "${{ github.repository }}"
+                      remediationAction: "None"
+                      ciBackLink: "https://github.com/${{ github.repository }}"
+                      project: "${{ github.repository }}"
+                      branch: "${{ github.ref }}"
+                      event: "${{ github.event_name }}"
+                      owner: aericjw
