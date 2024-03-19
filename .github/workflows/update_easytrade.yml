@@ -1,0 +1,89 @@
+name: update EasyTrade and notify Dynatrace
+run-name: update EasyTrade and notify Dynatrace
+on:
+  pull_request:
+    types:
+      - closed
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    environment: automating-dynatrace
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: deploy easytrade changes
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        with:
+          args: apply -f /github/workspace/kubernetes-manifests -n easytrade
+      - name: run monaco
+        uses: actions-hub/docker/cli@master
+        env:
+          SKIP_LOGIN: true
+      - run: docker run --env TENANT_URL=${{ secrets.TENANT_URL }} --env TENANT_TOKEN=${{ secrets.TENANT_TOKEN }} --env CLIENT_ID=${{ secrets.CLIENT_ID }} --env CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} --env SLACK_TOKEN=${{ secrets.SLACK_TOKEN }} --mount type=bind,src=$GITHUB_WORKSPACE/monaco,target=/monaco dynatrace/dynatrace-configuration-as-code:latest deploy manifest.yaml
+      - name: load test
+        uses: rbhadti94/apache-jmeter-action@v0.5.0
+        with:
+            testFilePath: /github/workspace/loadtesting/Enable_DB_NOT_RESPONDING.jmx
+      - name: notify Dynatrace on failure
+        if: failure()
+        uses: dynatrace-oss/dynatrace-github-action@v9
+        with:
+            url: ${{ secrets.DT_CLASSIC_URL }}
+            token: ${{ secrets.TENANT_TOKEN}}
+            metrics: |
+                - metric: "github.deployments"
+                    value: "1.0"
+                    dimensions:
+                    project: "${{ github.repository }}"
+                    branch: "${{ github.ref }}"
+                    event: "${{ github.event_name }}"
+                    result: "failure"
+                    owner: aericjw
+            events: |
+                - type: CUSTOM_DEPLOYMENT
+                title: Easytrade Deployment Failed
+                entitySelector: type("SERVICE"),toRelationship.isClusterOfService(type("KUBERNETES_CLUSTER"),entityName.equals("aeric-aks"))
+                properties:
+                    source: GitHub
+                    deploymentName: "GitHub Action"
+                    deploymentVersion: "${{ github.ref }}"
+                    deploymentProject: "${{ github.repository }}"
+                    remediationAction: "None"
+                    ciBackLink: "https://github.com/${{ github.repository }}"
+                    project: "${{ github.repository }}"
+                    branch: "${{ github.ref }}"
+                    event: "${{ github.event_name }}"
+                    owner: aericjw
+      - name: notify Dynatrace on success
+        if: success()
+        uses: dynatrace-oss/dynatrace-github-action@v9
+        with:
+            url: ${{ secrets.DT_CLASSIC_URL }}
+            token: ${{ secrets.TENANT_TOKEN }}
+            metrics: |
+                - metric: "github.deployments"
+                    value: "1.0"
+                    dimensions:
+                    project: "${{ github.repository }}"
+                    branch: "${{ github.ref }}"
+                    event: "${{ github.event_name }}"
+                    result: "success"
+                    owner: aericjw
+            events: |
+                - type: CUSTOM_DEPLOYMENT
+                title: Easytrade Deployment Failed
+                entitySelector: type("SERVICE"),toRelationship.isClusterOfService(type("KUBERNETES_CLUSTER"),entityName.equals("aeric-aks"))
+                properties:
+                    source: GitHub
+                    deploymentName: "GitHub Action"
+                    deploymentVersion: "${{ github.ref }}"
+                    deploymentProject: "${{ github.repository }}"
+                    remediationAction: "None"
+                    ciBackLink: "https://github.com/${{ github.repository }}"
+                    project: "${{ github.repository }}"
+                    branch: "${{ github.ref }}"
+                    event: "${{ github.event_name }}"
+                    owner: aericjw
