@@ -74,7 +74,7 @@ jobs:
                     owner: aericjw
             events: |
                 - type: CUSTOM_DEPLOYMENT
-                  title: Easytrade Deployment Failed
+                  title: Easytrade Deployment Passed
                   entitySelector: type("SERVICE"),toRelationship.isClusterOfService(type("KUBERNETES_CLUSTER"),entityName.equals("aeric-aks"))
                   properties:
                       source: GitHub
