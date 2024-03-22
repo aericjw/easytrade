@@ -2,6 +2,12 @@ configs:
   - id: easytrade
     config:
       name: EasyTrade
+      parameters:
+        extractedIDs:
+          type: value
+          value:
+            id_06c6efe3_5d92_4ead_be0a_2da8ca3f6555: 06c6efe3-5d92-4ead-be0a-2da8ca3f6555
+            id_7a090fb5_39b2_49d5_a80d_8539cc916609: 7a090fb5-39b2-49d5-a80d-8539cc916609
       template: easytrade.json
       skip: false
     type:

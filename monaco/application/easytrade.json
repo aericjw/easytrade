@@ -1,5 +1,26 @@
 {
-  "conversionGoals": [],
+  "conversionGoals": [
+    {
+      "destinationDetails": {
+        "caseSensitive": false,
+        "matchType": "Ends",
+        "urlOrPath": "buy"
+      },
+      "id": "{{ .extractedIDs.id_06c6efe3_5d92_4ead_be0a_2da8ca3f6555 }}",
+      "name": "Completes Trade (Buy)",
+      "type": "Destination"
+    },
+    {
+      "destinationDetails": {
+        "caseSensitive": false,
+        "matchType": "Ends",
+        "urlOrPath": "sell"
+      },
+      "id": "{{ .extractedIDs.id_7a090fb5_39b2_49d5_a80d_8539cc916609 }}",
+      "name": "Completes Trade (Sell)",
+      "type": "Destination"
+    }
+  ],
   "costControlUserSessionPercentage": 100,
   "customActionApdexSettings": {
     "frustratingFallbackThreshold": 12000,
@@ -14,7 +35,24 @@
     "toleratedThreshold": 3000
   },
   "loadActionKeyPerformanceMetric": "VISUALLY_COMPLETE",
-  "metaDataCaptureSettings": [],
+  "metaDataCaptureSettings": [
+    {
+      "capturingName": "#root \u003e div \u003e header \u003e div \u003e div \u003e div.MuiStack-root.css-1lnp4vl \u003e p",
+      "name": "VisitTag3",
+      "publicMetadata": false,
+      "type": "CSS_SELECTOR",
+      "uniqueId": 1,
+      "useLastValue": false
+    },
+    {
+      "capturingName": "div:nth-child(2) \u003e div \u003e input@value",
+      "name": "packagetype",
+      "publicMetadata": false,
+      "type": "CSS_SELECTOR",
+      "uniqueId": 2,
+      "useLastValue": false
+    }
+  ],
   "monitoringSettings": {
     "addCrossOriginAnonymousAttribute": true,
     "advancedJavaScriptTagSettings": {
@@ -85,7 +123,7 @@
       },
       "visuallyCompleteAndSpeedIndex": true
     },
-    "cookiePlacementDomain": "",
+    "cookiePlacementDomain": null,
     "correlationHeaderInclusionRegex": "",
     "customConfigurationProperties": "",
     "excludeXhrRegex": "",
@@ -108,6 +146,7 @@
     },
     "libraryFileLocation": "",
     "monitoringDataPath": "",
+    "sameSiteCookieAttribute": null,
     "scriptTagCacheDurationInHours": 1,
     "secureCookieAttribute": false,
     "serverRequestPathId": "",
@@ -122,18 +161,44 @@
     "enabled": false
   },
   "type": "AUTO_INJECTED",
-  "userActionAndSessionProperties": [],
+  "userActionAndSessionProperties": [
+    {
+      "aggregation": "LAST",
+      "displayName": "packagetype",
+      "ignoreCase": false,
+      "key": "package_type",
+      "metadataId": 2,
+      "origin": "META_DATA",
+      "storeAsSessionProperty": true,
+      "storeAsUserActionProperty": false,
+      "type": "STRING",
+      "uniqueId": 4
+    }
+  ],
   "userActionNamingSettings": {
     "customActionNamingRules": [],
     "ignoreCase": true,
     "loadActionNamingRules": [],
     "placeholders": [],
-    "queryParameterCleanups": ["cfid", "phpsessid", "__sid", "cftoken", "sid"],
+    "queryParameterCleanups": [
+      "cfid",
+      "phpsessid",
+      "__sid",
+      "cftoken",
+      "sid"
+    ],
     "splitUserActionsByDomain": true,
     "useFirstDetectedLoadAction": false,
     "xhrActionNamingRules": []
   },
-  "userTags": [],
+  "userTags": [
+    {
+      "cleanupRule": "Hi,.(.*+)",
+      "ignoreCase": false,
+      "metadataId": 1,
+      "uniqueId": 3
+    }
+  ],
   "waterfallSettings": {
     "resourceBrowserCachingThreshold": 50,
     "resourcesThreshold": 100000,
