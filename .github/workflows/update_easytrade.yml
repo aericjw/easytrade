@@ -26,7 +26,7 @@ jobs:
       - name: load test
         uses: rbhadti94/apache-jmeter-action@v0.5.0
         with:
-            testFilePath: /github/workspace/loadtesting/Enable_DB_NOT_RESPONDING.jmx
+            testFilePath: /github/workspace/loadtesting/loadtest.jmx
       - name: notify Dynatrace on failure
         if: failure()
         uses: dynatrace-oss/dynatrace-github-action@v9
