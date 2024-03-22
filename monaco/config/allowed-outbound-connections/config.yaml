@@ -9,6 +9,7 @@ configs:
             - slack.com
             - "4.156.112.213"
             - yo-this-is-public.s3.eu-central-1.amazonaws.com
+            - aericjw.atlassian.net
       skip: false
     type:
       settings:
