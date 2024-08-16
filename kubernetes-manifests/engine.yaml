@@ -10,8 +10,6 @@ spec:
     metadata:
       labels:
         app: engine
-      annotations:
-        instrumentation.opentelemetry.io/inject-java: "true"
     spec:
       containers:
         - name: engine

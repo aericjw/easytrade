@@ -10,8 +10,6 @@ spec:
     metadata:
       labels:
         app: third-party-service
-      annotations:
-        instrumentation.opentelemetry.io/inject-java: "true"
     spec:
       containers:
         - name: third-party-service
