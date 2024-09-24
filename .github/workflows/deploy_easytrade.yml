@@ -40,23 +40,16 @@ jobs:
           SRG_EVALUATION_VERSION: "1.0.0"
           SRG_EVALUATION_BUILD_ID: "${{ github.run_id }}"
 
-  # deploy:
-  #   needs: evaluation
-  #   runs-on: ubuntu-latest
-  #   environment: automating-dynatrace
-  #   steps:
-  #     - name: checkout
-  #       uses: actions/checkout@v4
-  #     - name: create namespace
-  #       uses: actions-hub/kubectl@master
-  #       env:
-  #         KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-  #       with:
-  #         args: create namespace easytrade
-  #     - name: deploy easytrade
-  #       uses: actions-hub/kubectl@master
-  #       env:
-  #         KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-  #       with:
-  #         args: apply -f /github/workspace/kubernetes-manifests -n easytrade
+  deploy:
+    needs: evaluation
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: deploy easytrade
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        with:
+          args: apply -f /github/workspace/kubernetes-manifests -n easytrade
 
