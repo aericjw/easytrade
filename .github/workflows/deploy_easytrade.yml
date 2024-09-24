@@ -24,6 +24,7 @@ jobs:
     steps:
       - name: "Run SRG evaluation"
         run: |
+          echo $DYNATRACE_URL_GEN3 $ACCOUNT_URN $DYNATRACE_CLIENT_ID $DYNATRACE_SECRET $DYNATRACE_SSO_URL
           dta srg evaluate
         env:
           LOG_LEVEL: "verbose"
