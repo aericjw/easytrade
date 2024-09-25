@@ -2,10 +2,8 @@ name: Deploy Easytrade
 run-name: Deploy Easytrade
 on: workflow_dispatch
 jobs:
-  test:
+  setup:
     runs-on: ubuntu-latest
-    container:
-      image: europe-docker.pkg.dev/dynatrace-demoability/docker/easytrade/loginservice:d863a2e
     outputs:
       startTime: ${{ steps.set-start-end-time.outputs.startTime }}
       endTime: ${{ steps.set-start-end-time.outputs.endTime }}
@@ -17,6 +15,12 @@ jobs:
           echo "startTime=$start" >> $GITHUB_OUTPUT
           end=$(date --utc +%FT%TZ)
           echo "endTime=$end" >> $GITHUB_OUTPUT
+          
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: europe-docker.pkg.dev/dynatrace-demoability/docker/easytrade/loginservice:d863a2e
+    steps:
       - name: "Install OneAgent"
         id: install-oneagent
         run: |
