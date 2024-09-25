@@ -13,7 +13,7 @@ jobs:
       - name: "Set start/end time for evaluation"
         id: set-start-end-time
         run: |
-          start=$(date -d '10 minute ago' --utc +%FT%TZ)
+          start=$(date -d '10 minutes ago' --utc +%FT%TZ)
           echo "startTime=$start" >> $GITHUB_OUTPUT
           end=$(date --utc +%FT%TZ)
           echo "endTime=$end" >> $GITHUB_OUTPUT
