@@ -1,6 +1,13 @@
 name: Deploy Easytrade
 run-name: Deploy Easytrade
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+    inputs:
+      failure:
+        description: "simulate bad code"
+        required: true
+        default: true
+        type: boolean
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -11,28 +18,27 @@ jobs:
       - name: "Set start/end time for evaluation"
         id: set-start-end-time
         run: |
-          start=$(date -d '10 minutes ago' --utc +%FT%TZ)
+          start=$(date -d '3 minute ago' --utc +%FT%TZ)
           echo "startTime=$start" >> $GITHUB_OUTPUT
           end=$(date --utc +%FT%TZ)
           echo "endTime=$end" >> $GITHUB_OUTPUT
-          
+
   test:
     runs-on: ubuntu-latest
-    container:
-      image: europe-docker.pkg.dev/dynatrace-demoability/docker/easytrade/loginservice:d863a2e
     steps:
-      - name: "Install OneAgent"
-        id: install-oneagent
-        run: |
-          wget -O Dynatrace-OneAgent-Linux.sh "https://xle26845.sprint.dynatracelabs.com/api/v1/deployment/installer/agent/unix/default/latest?arch=x86" --header="Authorization: Api-Token ${{ secrets.DEPLOYMENT_TOKEN }}"
-          /bin/sh Dynatrace-OneAgent-Linux.sh --set-monitoring-mode=fullstack --set-app-log-content-access=true --set-host-group=ci-cd
-      # - name: "Load Test"
-      #   uses: rbhadti94/apache-jmeter-action@v0.5.0
-      #   with:
-      #     testFilePath: /github/workspace/loadtesting/loadtest.jmx
+      - name: "Load Test - Failure"
+        uses: rbhadti94/apache-jmeter-action@v0.5.0
+        with:
+          testFilePath: /github/workspace/loadtesting/failure.jmx
+        if: ${{inputs.failure == true}}
+      - name: "Load Test - Success"
+        uses: rbhadti94/apache-jmeter-action@v0.5.0
+        with:
+          testFilePath: /github/workspace/loadtesting/success.jmx
+        if: ${{inputs.failure == false}}
 
   evaluation:
-    needs: test
+    needs: [setup, test]
     runs-on: ubuntu-latest
     container:
       image: "dynatraceace/dt-automation-cli:latest"
@@ -48,10 +54,10 @@ jobs:
           DYNATRACE_SECRET: ${{ secrets.DYNATRACE_SECRET }}
           DYNATRACE_SSO_URL: ${{ secrets.DYNATRACE_SSO_URL }}
           SRG_EVALUATION_STOP_ON_FAILURE: "true"
-          SRG_EVALUATION_SERVICE: "demo"
-          SRG_EVALUATION_STAGE: "dev"
-          SRG_EVALUATION_START_TIME: "${{ needs.test.outputs.startTime }}"
-          SRG_EVALUATION_END_TIME: "${{ needs.test.outputs.endTime }}"
+          SRG_EVALUATION_SERVICE: "database"
+          SRG_EVALUATION_STAGE: "prod"
+          SRG_EVALUATION_START_TIME: "${{ needs.setup.outputs.startTime }}"
+          SRG_EVALUATION_END_TIME: "${{ needs.setup.outputs.endTime }}"
           SRG_EVALUATION_VERSION: "1.0.0"
           SRG_EVALUATION_BUILD_ID: "${{ github.run_id }}"
 
