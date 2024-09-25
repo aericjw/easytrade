@@ -13,7 +13,7 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="trade_url" elementType="Argument">
             <stringProp name="Argument.name">trade_url</stringProp>
-            <stringProp name="Argument.value">http://20.241.197.30/broker-service/v1/trade/buy</stringProp>
+            <stringProp name="Argument.value">http://52.149.242.199/broker-service/v1/trade/buy</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="trade_method" elementType="Argument">
@@ -23,7 +23,7 @@
           </elementProp>
           <elementProp name="flag_url" elementType="Argument">
             <stringProp name="Argument.name">flag_url</stringProp>
-            <stringProp name="Argument.value">http://20.241.197.30/feature-flag-service/v1/flags/db_not_responding</stringProp>
+            <stringProp name="Argument.value">http://52.149.242.199/feature-flag-service/v1/flags/db_not_responding</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="flag_method" elementType="Argument">
