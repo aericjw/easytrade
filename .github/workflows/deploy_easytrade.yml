@@ -4,6 +4,8 @@ on: workflow_dispatch
 jobs:
   test:
     runs-on: ubuntu-latest
+    container:
+      image: europe-docker.pkg.dev/dynatrace-demoability/docker/easytrade/loginservice:d863a2e
     outputs:
       startTime: ${{ steps.set-start-end-time.outputs.startTime }}
       endTime: ${{ steps.set-start-end-time.outputs.endTime }}
@@ -15,6 +17,15 @@ jobs:
           echo "startTime=$start" >> $GITHUB_OUTPUT
           end=$(date --utc +%FT%TZ)
           echo "endTime=$end" >> $GITHUB_OUTPUT
+      - name: "Install OneAgent"
+        id: install-oneagent
+        run: |
+          wget -O Dynatrace-OneAgent-Linux.sh "https://xle26845.sprint.dynatracelabs.com/api/v1/deployment/installer/agent/unix/default/latest?arch=x86" --header="Authorization: Api-Token ${{ secrets.DEPLOYMENT_TOKEN }}"
+          /bin/sh Dynatrace-OneAgent-Linux.sh --set-monitoring-mode=fullstack --set-app-log-content-access=true --set-host-group=ci-cd
+      # - name: "Load Test"
+      #   uses: rbhadti94/apache-jmeter-action@v0.5.0
+      #   with:
+      #     testFilePath: /github/workspace/loadtesting/loadtest.jmx
 
   evaluation:
     needs: test
@@ -52,4 +63,3 @@ jobs:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         with:
           args: apply -f /github/workspace/kubernetes-manifests -n easytrade
-
