@@ -1,3 +1,4 @@
+import React from "react"
 import Grid from "@mui/material/Grid2"
 import { Instrument } from "../../api/instrument/types"
 import InstrumentCard from "./InstrumentCard"
@@ -22,7 +23,7 @@ export default function InstrumentsGrid({
     instruments: Instrument[]
 }) {
     return (
-        <Grid container spacing={2} data-dt-feature="instruments">
+        <Grid container spacing={2} data-dt-features="instruments">
             {instruments.map((instrument) => (
                 <Item key={instrument.id} {...instrument} />
             ))}
